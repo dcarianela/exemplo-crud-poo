@@ -1,2 +1,1 @@
-# exemplo-crud-php
- Atividades de programação CRUD com PHP procedural
+# Exemplo CRUD PHP refatorado com Orientação a Objetos
