@@ -1,9 +1,7 @@
 <?php
-namespace ExemploCrud;
+namespace ExemploCrud\Database;
 
-use Exception;
-use PDO;
-use Throwable;
+use Exception, PDO, Throwable;
 
 abstract class ConexaoBD
 {

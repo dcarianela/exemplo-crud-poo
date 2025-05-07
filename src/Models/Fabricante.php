@@ -1,5 +1,5 @@
 <?php 
-namespace ExemploCrud;
+namespace ExemploCrud\Models;
 
 use InvalidArgumentException;
 
