@@ -38,8 +38,7 @@ final class FabricanteServico {
         }
     }
 
-        public function buscarPorId(int $id): ?array
-    {
+    public function buscarPorId(int $id): ?array {
         $sql = "SELECT * FROM fabricantes WHERE id = :id";
  
         try {
@@ -54,4 +53,33 @@ final class FabricanteServico {
             throw new Exception("Erro ao carregar fabricante: " . $erro->getMessage());
         }
     }
-}
+
+    public function atualizar(Fabricante $fabricante):void {
+        $sql = "UPDATE fabricantes SET nome = :nome WHERE id = :id";
+
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindValue(":nome", $fabricante->getNome(), PDO::PARAM_STR);
+            $consulta->bindValue(":id", $fabricante->getId(), PDO::PARAM_INT);
+            $consulta->execute();
+
+        } catch (Throwable $erro) {
+            throw new Exception("Erro ao atualizar o nome do fabricante: ".$erro->getMessage());
+        }
+    }
+
+    public function excluir(int $id): void
+    {
+        $sql = "DELETE FROM fabricantes WHERE id = :id";
+
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindValue(":id", $id, PDO::PARAM_INT);
+            $consulta->execute();
+
+        } catch (Throwable $erro) {
+            throw new Exception("Erro ao excluir fabricante: ".$erro->getMessage());
+        }
+    }
+
+} // final da classe 
