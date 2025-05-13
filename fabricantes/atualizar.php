@@ -1,5 +1,6 @@
 <?php
 
+use ExemploCrud\Helpers\Utils;
 use ExemploCrud\Services\FabricanteServico;
 require_once "../vendor/autoload.php";
 
@@ -9,9 +10,7 @@ $id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_NUMBER_INT);
 $fabricanteServico = new FabricanteServico();
 $fabricanteDados = $fabricanteServico->buscarPorId($id);
 
-echo "</pre>";
-var_dump($fabricanteDados);
-echo "</pre>";
+Utils::dump($fabricanteDados);
 
 /* Verificando se o formulário de atualização foi acionado */
 if (isset($_POST['atualizar'])){
