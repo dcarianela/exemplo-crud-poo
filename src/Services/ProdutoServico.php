@@ -67,4 +67,24 @@ final class ProdutoServico {
             throw new Exception("Erro ao carregar produto: ".$erro->getMessage());
         }
     }
+
+    public function atualizar(Produto $produto): void {
+        $sql = "UPDATE produtos
+            SET nome = :nome, preco = :preco, quantidade = :quantidade, fabricante_id = :fabricante_id, descricao = :descricao
+            WHERE id = :id";
+    
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindValue(":id", $produto->getId(), PDO::PARAM_INT);
+            $consulta->bindValue(":nome", $produto->getNome(), PDO::PARAM_STR);
+            $consulta->bindValue(":preco", $produto->getPreco(), PDO::PARAM_STR);
+            $consulta->bindValue(":quantidade", $produto->getQuantidade(), PDO::PARAM_INT);
+            $consulta->bindValue(":descricao", $produto->getDescricao(), PDO::PARAM_STR);
+            $consulta->bindValue(":fabricante_id", $produto->getFabricanteId(), PDO::PARAM_INT);
+            $consulta->execute();
+
+        } catch (Exception $erro) {
+            die("Erro ao atualizar o produto: ".$erro->getMessage());
+        }
+    }
 }
