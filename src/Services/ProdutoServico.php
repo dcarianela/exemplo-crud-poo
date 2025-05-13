@@ -1,0 +1,70 @@
+<?php 
+namespace ExemploCrud\Services;
+
+use ExemploCrud\Database\ConexaoBD;
+use Exception, PDO, Throwable;
+use ExemploCrud\Models\Produto;
+
+final class ProdutoServico {
+    private PDO $conexao;
+
+    public function __construct()
+    {
+        $this->conexao = ConexaoBD::getConexao();
+    }
+
+    public function listarTodos():array {
+        $sql = "SELECT 
+            produtos.id,
+            produtos.nome AS Produto,
+            produtos.preco AS 'Preço',
+            produtos.quantidade AS Quantidade,
+            fabricantes.nome AS Fabricante
+        FROM produtos INNER JOIN fabricantes
+        ON produtos.fabricante_id = fabricantes.id
+        ORDER BY produto";
+
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->execute();
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (Throwable $erro) {
+            throw new Exception("Erro ao carregar produtos: ".$erro->getMessage());
+        }
+    }
+
+    public function inserir(Produto $produto): void {
+        $sql = "INSERT INTO produtos(
+            nome, preco, quantidade, fabricante_id, descricao)
+            VALUES (
+            :nome, :preco, :quantidade, :fabricante_id, :descricao)";
+
+        try {
+            $consulta = $this->conexao->prepare($sql);
+
+            $consulta->bindValue(":nome", $produto->getNome(), PDO::PARAM_STR);
+            $consulta->bindValue(":preco", $produto->getPreco(), PDO::PARAM_STR);
+            $consulta->bindValue(":quantidade", $produto->getQuantidade(), PDO::PARAM_INT);
+            $consulta->bindValue(":fabricante_id", $produto->getFabricanteId(), PDO::PARAM_INT);
+            $consulta->bindValue(":descricao", $produto->getDescricao(), PDO::PARAM_STR);
+            
+            $consulta->execute();
+        } catch (Throwable $erro) {
+            throw new Exception("Erro ao inserir produto: ".$erro->getMessage());
+        }
+    }
+
+    public function buscarPorId(int $id): ?array {
+        $sql = "SELECT * FROM produtos WHERE id = :id";
+
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindValue(":id", $id, PDO::PARAM_INT);
+            $consulta->execute();
+            return $consulta->fetch(PDO::FETCH_ASSOC);
+        } catch (Throwable $erro) {
+            throw new Exception("Erro ao carregar produto: ".$erro->getMessage());
+        }
+    }
+}

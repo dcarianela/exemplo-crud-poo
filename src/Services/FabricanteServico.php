@@ -68,8 +68,7 @@ final class FabricanteServico {
         }
     }
 
-    public function excluir(int $id): void
-    {
+    public function excluir(int $id): void {
         $sql = "DELETE FROM fabricantes WHERE id = :id";
 
         try {

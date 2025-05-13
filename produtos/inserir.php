@@ -1,16 +1,24 @@
 <?php
-require_once "../src/funcoes-fabricantes.php";
-require_once "../src/funcoes-produtos.php";
 
-$listaDeFabricantes = listarFabricantes($conexao);
-if(isset($_POST['inserir'])){
+use ExemploCrud\Models\Produto;
+use ExemploCrud\Services\FabricanteServico;
+use ExemploCrud\Services\ProdutoServico;
+
+require_once "../vendor/autoload.php";
+
+$produtoServico = new ProdutoServico();
+$listaDeFabricantes = new FabricanteServico();
+$fabricantes = $listaDeFabricantes->listarTodos();
+
+if( isset($_POST['inserir']) ){
     $nome = filter_input(INPUT_POST, "nome", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $preco = filter_input(INPUT_POST, "preco", FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
     $quantidade = filter_input(INPUT_POST, "quantidade", FILTER_SANITIZE_NUMBER_INT);
     $idFabricante = filter_input(INPUT_POST, "fabricante", FILTER_SANITIZE_NUMBER_INT);
     $descricao = filter_input(INPUT_POST, "descricao", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-    inserirProduto($conexao, $nome, $preco, $quantidade, $idFabricante, $descricao);
+    $produto = new Produto($nome, $preco, $quantidade, $idFabricante, null, $descricao);
+    $produtoServico->inserir($produto);
 
     header("location:visualizar.php");
     exit;
@@ -49,7 +57,7 @@ if(isset($_POST['inserir'])){
                 <label class="form-label" for="fabricante">Fabricante:</label>
                 <select class="form-select" name="fabricante" id="fabricante" required>
                     <option value=""></option>
-<?php foreach($listaDeFabricantes as $fabricante) { ?>
+<?php foreach($fabricantes as $fabricante) { ?>
                     <option value="<?=$fabricante['id']?>">
                     <?=$fabricante['nome']?></option>
 <?php } ?>     
