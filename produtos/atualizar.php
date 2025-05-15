@@ -1,10 +1,18 @@
 <?php
-require_once "../src/funcoes-produtos.php";
-require_once "../src/funcoes-fabricantes.php";
-$listaDeFabricantes = listarFabricantes($conexao);
+
+use ExemploCrud\Models\Produto;
+use ExemploCrud\Services\FabricanteServico;
+use ExemploCrud\Services\ProdutoServico;
+
+require_once "../vendor/autoload.php";
+
+$listaDeFabricantes = new FabricanteServico();
+$fabricantes = $listaDeFabricantes->listarTodos();
 
 $id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_NUMBER_INT);
-$produto = listarUmProduto($conexao, $id);
+$produtoServico = new ProdutoServico();
+$buscarPorId = $produtoServico->buscarPorId($id);
+
 
 if (isset($_POST['atualizar'])){
     $nome = filter_input(INPUT_POST, "nome", FILTER_SANITIZE_SPECIAL_CHARS);
@@ -13,7 +21,8 @@ if (isset($_POST['atualizar'])){
     $descricao = filter_input(INPUT_POST, "descricao", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $idFabricante = filter_input(INPUT_POST, "fabricante", FILTER_SANITIZE_NUMBER_INT);
     
-    atualizarProduto($conexao, $id, $nome, $preco, $quantidade, $descricao, $idFabricante);
+    $produto = new Produto($nome, $preco, $quantidade, $idFabricante, null, $descricao);
+    $produtoServico->atualizar($produto);
 
     header("location:visualizar.php");
     exit;

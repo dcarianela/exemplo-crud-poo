@@ -83,8 +83,8 @@ final class ProdutoServico {
             $consulta->bindValue(":fabricante_id", $produto->getFabricanteId(), PDO::PARAM_INT);
             $consulta->execute();
 
-        } catch (Exception $erro) {
-            die("Erro ao atualizar o produto: ".$erro->getMessage());
+        } catch (Throwable $erro) {
+            throw new Exception("Erro ao atualizar o produto: ".$erro->getMessage());
         }
     }
 }
