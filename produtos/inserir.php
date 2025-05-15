@@ -7,8 +7,8 @@ use ExemploCrud\Services\ProdutoServico;
 require_once "../vendor/autoload.php";
 
 $produtoServico = new ProdutoServico();
-$listaDeFabricantes = new FabricanteServico();
-$fabricantes = $listaDeFabricantes->listarTodos();
+$fabricanteServico = new FabricanteServico();
+$listaDeFabricantes = $fabricanteServico->listarTodos();
 
 if( isset($_POST['inserir']) ){
     $nome = filter_input(INPUT_POST, "nome", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -57,7 +57,7 @@ if( isset($_POST['inserir']) ){
                 <label class="form-label" for="fabricante">Fabricante:</label>
                 <select class="form-select" name="fabricante" id="fabricante" required>
                     <option value=""></option>
-<?php foreach($fabricantes as $fabricante) { ?>
+<?php foreach($listaDeFabricantes as $fabricante) { ?>
                     <option value="<?=$fabricante['id']?>">
                     <?=$fabricante['nome']?></option>
 <?php } ?>     
