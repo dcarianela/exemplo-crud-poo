@@ -9,7 +9,7 @@ $fabricanteServico = new FabricanteServico();
 if ( isset($_POST['inserir']) ){
 
     $nome = filter_input(
-        INPUT_POST, "nome", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        INPUT_POST, "nome", FILTER_SANITIZE_SPECIAL_CHARS);
     $fabricante = new Fabricante($nome);
     $fabricanteServico->inserir($fabricante);
     header("location:visualizar.php");

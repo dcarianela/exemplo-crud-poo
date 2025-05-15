@@ -6,12 +6,13 @@ use ExemploCrud\Services\ProdutoServico;
 
 require_once "../vendor/autoload.php";
 
-$listaDeFabricantes = new FabricanteServico();
-$fabricantes = $listaDeFabricantes->listarTodos();
+
+$fabricanteServico = new FabricanteServico();
+$listaDeFabricantes = $fabricanteServico->listarTodos();
 
 $id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_NUMBER_INT);
 $produtoServico = new ProdutoServico();
-$buscarPorId = $produtoServico->buscarPorId($id);
+$produto = $produtoServico->buscarPorId($id);
 
 
 if (isset($_POST['atualizar'])){
@@ -20,8 +21,8 @@ if (isset($_POST['atualizar'])){
     $quantidade = filter_input(INPUT_POST, "quantidade", FILTER_SANITIZE_NUMBER_INT);
     $descricao = filter_input(INPUT_POST, "descricao", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $idFabricante = filter_input(INPUT_POST, "fabricante", FILTER_SANITIZE_NUMBER_INT);
-    
-    $produto = new Produto($nome, $preco, $quantidade, $idFabricante, null, $descricao);
+
+    $produto = new Produto($nome, $preco, $quantidade, $idFabricante, $id, $descricao);
     $produtoServico->atualizar($produto);
 
     header("location:visualizar.php");
@@ -62,9 +63,6 @@ if (isset($_POST['atualizar'])){
                 <label class="form-label" for="fabricante">Fabricante:</label>
                 <select class="form-select" name="fabricante" id="fabricante" required>
                     <option value=""></option>
-            <!-- algoritmo para seleção do fabricante do produto que sera editado
-                   
-            Se a FK da tabela produtos for igual a PK da tabela fabricantes, ou seja, se o id do fabricante do produto for igual ao id do fabricante, entao coloque o atributo selected no <option> correspondente.-->
 
                 <?php foreach($listaDeFabricantes as $fabricante){ ?>
                     <option
